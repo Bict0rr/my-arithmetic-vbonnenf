@@ -1,0 +1,12 @@
+image: python:3.12
+
+stages:
+  - test
+
+test:
+  stage: test
+  before_script:
+    - pip install --no-cache-dir hatch
+  script:
+    - hatch test --cover
+  coverage: '/TOTAL.*\s+(\d+%)$/'
