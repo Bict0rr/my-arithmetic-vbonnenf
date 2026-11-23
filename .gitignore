@@ -28,3 +28,4 @@ htmlcov/
 .venv/
 venv/
 docs/_build/
+src/my_arithmetic_vbonnenf/_version.py

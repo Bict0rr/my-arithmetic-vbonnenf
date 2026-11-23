@@ -1,12 +1,35 @@
 image: python:3.12
 
+variables:
+  GIT_DEPTH: "0"
+
 stages:
   - test
+  - deploy
+
+before_script:
+  - pip install --no-cache-dir hatch
 
 test:
   stage: test
-  before_script:
-    - pip install --no-cache-dir hatch
   script:
     - hatch test --cover
   coverage: '/TOTAL.*\s+(\d+%)$/'
+
+deploy-stable:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - hatch build
+    - echo "my-arithmetic-vbonnenf deployment on stable servers"
+    - ls -la dist/
+
+deploy-develop:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+  script:
+    - hatch build
+    - echo "my-arithmetic-vbonnenf deployment on develop servers"
+    - ls -la dist/

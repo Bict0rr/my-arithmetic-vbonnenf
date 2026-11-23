@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -32,7 +32,11 @@ Issues = "https://github.com/vbonnenf/my-arithmetic-vbonnenf/issues"
 Source = "https://github.com/vbonnenf/my-arithmetic-vbonnenf"
 
 [tool.hatch.version]
-path = "src/my_arithmetic_vbonnenf/__about__.py"
+source = "vcs"
+raw-options = { local_scheme = "no-local-version" }
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/my_arithmetic_vbonnenf/_version.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
@@ -47,6 +51,7 @@ branch = true
 parallel = true
 omit = [
   "src/my_arithmetic_vbonnenf/__about__.py",
+  "src/my_arithmetic_vbonnenf/_version.py",
 ]
 
 [tool.coverage.paths]
