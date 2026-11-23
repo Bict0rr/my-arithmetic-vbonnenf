@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - "*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install hatch
+        run: pip install --no-cache-dir hatch
+
+      - name: Build package
+        run: hatch build
+
+      - name: Deploy on stable servers (tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "my-arithmetic-vbonnenf deployment on stable servers"
+          ls -la dist/
+
+      - name: Deploy on develop servers
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "my-arithmetic-vbonnenf deployment on develop servers"
+          ls -la dist/
