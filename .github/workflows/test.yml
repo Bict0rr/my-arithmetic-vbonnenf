@@ -18,8 +18,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install hatch
-        run: pip install --no-cache-dir hatch
+      - name: Install hatch and coverage
+        run: pip install --no-cache-dir hatch coverage
 
       - name: Run tests with coverage
-        run: hatch test --cover
+        run: |
+          hatch test --cover
+          coverage xml
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.xml
+          github-token: ${{ secrets.GITHUB_TOKEN }}

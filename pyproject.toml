@@ -45,6 +45,14 @@ extra-dependencies = [
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/my_arithmetic_vbonnenf tests}"
 
+[tool.hatch.envs.docs]
+dependencies = [
+  "sphinx",
+  "sphinx-rtd-theme",
+]
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -b html docs docs/_build/html"
+
 [tool.coverage.run]
 source_pkgs = ["my_arithmetic_vbonnenf", "tests"]
 branch = true

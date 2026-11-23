@@ -1,0 +1,33 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install hatch
+        run: pip install --no-cache-dir hatch
+
+      - name: Build Sphinx documentation
+        run: hatch run docs:build
+
+      - name: Trigger ReadTheDocs build
+        if: github.event_name == 'push' && secrets.RTD_WEBHOOK_URL != '' && secrets.RTD_WEBHOOK_TOKEN != ''
+        run: |
+          curl -X POST -d "branches=${GITHUB_REF_NAME}" -d "token=${{ secrets.RTD_WEBHOOK_TOKEN }}" "${{ secrets.RTD_WEBHOOK_URL }}"
